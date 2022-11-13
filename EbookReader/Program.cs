@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using VersOne.Epub;
+using EbookReader.Views;
+using EbookReader.Models;
+using EbookReader.Presenters;
 
 namespace EbookReader
 {
     internal static class Program
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
         [STAThread]
         static void Main()
         {
@@ -23,7 +23,9 @@ namespace EbookReader
             //}
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            IMainView mainView = new MainView();
+            new MainMenuPresenter(mainView, new MainViewRepository());
+            Application.Run((Form) mainView);
         }
     }
 }
