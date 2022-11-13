@@ -16,24 +16,31 @@ namespace EbookReader.Presenters
 
         public EbookItemPresenter(IEbookItemView ebookItemView, Ebook ebook)
         {
-            Debug.WriteLine("EbookItemPresenter constructor");
             this.ebookItemView = ebookItemView;
             this.ebook = ebook;
 
+            // Set the view's properties
             this.ebookItemView.EbookPath = ebook.EbookPath;
             this.ebookItemView.EbookTitle = ebook.EbookTitle;
             this.ebookItemView.EbookAuthor = ebook.EbookAuthor;
-            this.ebookItemView.EbookCoverImage = ebook.EbookCoverImage;
+            if (ebook.EbookCoverImage != null)
+            {
+                this.ebookItemView.EbookCoverImage = ebook.EbookCoverImage;
+            }
             this.ebookItemView.EbookType = ebook.EbookType;
 
+            // Subscribe to events
             this.ebookItemView.EbookItemClicked += EbookItemView_EbookItemClicked;
 
+            
             this.ebookItemView.Show();
         }
 
         private void EbookItemView_EbookItemClicked(object sender, EventArgs e)
         {
-            Debug.WriteLine("Ebook item clicked");
+            IBookReadView bookReadView = new BookReadView();
+            new BookReadPresenter(bookReadView, ebook);
+            bookReadView.Show();
         }
     }
 }

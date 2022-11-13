@@ -18,7 +18,21 @@ namespace EbookReader.Models
             this.eBook = EpubReader.ReadBook(ebookpath);
             this.EbookTitle = eBook.Title;
             this.EbookAuthor = eBook.Author;
-            this.EbookCoverImage = Image.FromStream(new MemoryStream(eBook.CoverImage));
+            if (eBook.CoverImage != null)
+            {
+                this.EbookCoverImage = Image.FromStream(new MemoryStream(eBook.CoverImage));
+            }
         }
+
+        public override List<Chapter> getChapters()
+        {
+            List<Chapter> chapters = new List<Chapter>();
+            foreach (EpubNavigationItem navigationItem in eBook.Navigation)
+            {
+                chapters.Add(new Chapter(navigationItem.Title, 0));
+            }
+            return chapters;
+        }
+
     }
 }

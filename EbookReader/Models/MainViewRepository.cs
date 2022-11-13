@@ -16,9 +16,9 @@ namespace EbookReader.Models
         public List<Ebook> GetEbookItems()
         {
             EbookEpub epub1 = new EbookEpub(@"C:\\Users\\DylanPC\\source\\repos\\EbookReader\\EbookReader\\Resources\\Batman_ Nightwalker - Marie Lu.epub");
-            EbookEpub epub2 = new EbookEpub(@"C:\\Users\\DylanPC\\source\\repos\\EbookReader\\EbookReader\\Resources\\Batman_ Nightwalker - Marie Lu.epub");
+            EbookEpub epub2 = new EbookEpub(@"C:\\Users\\DylanPC\\source\\repos\\EbookReader\\EbookReader\\Resources\\Alices Adventures in Wonderland.epub");
             EbookEpub epub3 = new EbookEpub(@"C:\\Users\\DylanPC\\source\\repos\\EbookReader\\EbookReader\\Resources\\Batman_ Nightwalker - Marie Lu.epub");
-            EbookEpub epub4 = new EbookEpub(@"C:\\Users\\DylanPC\\source\\repos\\EbookReader\\EbookReader\\Resources\\Batman_ Nightwalker - Marie Lu.epub");
+            EbookEpub epub4 = new EbookEpub(@"C:\\Users\\DylanPC\\source\\repos\\EbookReader\\EbookReader\\Resources\\Alices Adventures in Wonderland.epub");
             
             List<Ebook> ebookItems = new List<Ebook>();
 

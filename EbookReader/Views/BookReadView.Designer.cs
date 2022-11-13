@@ -1,6 +1,6 @@
 ﻿namespace EbookReader.Views
 {
-    partial class MainView
+    partial class BookReadView
     {
         /// <summary>
         /// Required designer variable.
@@ -28,41 +28,31 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.SuspendLayout();
             // 
-            // textBox1
+            // flowLayoutPanel1
             // 
-            this.textBox1.Location = new System.Drawing.Point(42, 21);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(436, 20);
-            this.textBox1.TabIndex = 1;
-            this.textBox1.Text = "Search a book here...";
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(200, 578);
+            this.flowLayoutPanel1.TabIndex = 0;
             // 
-            // flowLayoutPanel
-            // 
-            this.flowLayoutPanel.Location = new System.Drawing.Point(21, 58);
-            this.flowLayoutPanel.Name = "flowLayoutPanel";
-            this.flowLayoutPanel.Size = new System.Drawing.Size(767, 380);
-            this.flowLayoutPanel.TabIndex = 2;
-            // 
-            // MainView
+            // BookReadView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.flowLayoutPanel);
-            this.Controls.Add(this.textBox1);
-            this.Name = "MainView";
-            this.Text = "MainView";
+            this.ClientSize = new System.Drawing.Size(826, 578);
+            this.Controls.Add(this.flowLayoutPanel1);
+            this.Name = "BookReadView";
+            this.Text = "BookReadView";
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel;
+
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
     }
 }

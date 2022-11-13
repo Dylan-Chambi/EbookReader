@@ -18,6 +18,8 @@ namespace EbookReader.Views
         private void AssociateAndRaiseViewEvents()
         {
             SetControlsRecursively(this.Controls);
+            //this.tableLayoutPanel.MouseEnter += delegate { Debug.WriteLine("MouseEnter"); };
+            //this.tableLayoutPanel.MouseLeave += delegate { Debug.WriteLine("MouseLeave"); };
         }
 
         public void SetControlsRecursively(ControlCollection controlCollection)

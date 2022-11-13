@@ -29,7 +29,23 @@ namespace EbookReader.Models
         public string EbookAuthor { get => ebookAuthor; set => ebookAuthor = value; }
         public Image EbookCoverImage { get => ebookCoverImage; set => ebookCoverImage = value; }
         public EbookType EbookType { get => ebookType; set => ebookType = value; }
-        
+
+        public abstract List<Chapter> getChapters();
+    }
+
+    public class Chapter
+    {
+        private string chapterTitle;
+        private int chapterIndexPage;
+
+        public Chapter(string chapterTitle, int chapterIndexPage)
+        {
+            this.chapterTitle = chapterTitle;
+            this.chapterIndexPage = chapterIndexPage;
+        }
+
+        public string ChapterTitle { get => chapterTitle; set => chapterTitle = value; }
+        public int ChapterIndexPage { get => chapterIndexPage; set => chapterIndexPage = value; }
     }
 
     public enum EbookType {

@@ -22,7 +22,6 @@ namespace EbookReader.Views
         event EventHandler EbookItemClicked;
          
         // Methods
-        //void SetEbookItemBindingSource(BindingSource ebookItemList);
         void Show();
         
     }
