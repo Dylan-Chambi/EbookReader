@@ -22,5 +22,6 @@ namespace EbookReader.Views
 
         public Ebook CurrentEbook { get => currentEbook; set => currentEbook = value; }
         public FlowLayoutPanel FlowLayoutPanel { get => this.flowLayoutPanel1; }
+        public TableLayoutPanel TableLayoutPanel { get => this.tableLayoutPanel1; }
     }
 }

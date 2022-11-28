@@ -31,8 +31,14 @@ namespace EbookReader.Models
         public EbookType EbookType { get => ebookType; set => ebookType = value; }
 
         public abstract List<Chapter> getChapters();
-    }
 
+        public abstract string getContent();
+
+        public abstract List<string> getChaptersContent();
+
+        public abstract List<string> getChapterContentSplitBySize(string chapter, int width, int height);
+    }
+    
     public class Chapter
     {
         private string chapterTitle;

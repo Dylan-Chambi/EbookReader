@@ -12,6 +12,8 @@ namespace EbookReader.Views
     {
         Ebook CurrentEbook { get; set; }
         FlowLayoutPanel FlowLayoutPanel { get; }
+        TableLayoutPanel TableLayoutPanel { get; }
+
 
         //event EventHandler BookReadViewLoad;
 
