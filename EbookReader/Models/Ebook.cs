@@ -36,7 +36,11 @@ namespace EbookReader.Models
 
         public abstract List<string> getChaptersContent();
 
-        public abstract List<string> getChapterContentSplitBySize(string chapter, int width, int height);
+        public abstract Dictionary<string, byte[]> getImages();
+
+        public abstract Dictionary<string, byte[]> getFonts();
+
+        public abstract Dictionary<string, string> getStylesheets();
     }
     
     public class Chapter

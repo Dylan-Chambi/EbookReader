@@ -62,6 +62,7 @@
             this.Controls.Add(this.flowLayoutPanel1);
             this.Name = "BookReadView";
             this.Text = "BookReadView";
+            this.Load += new System.EventHandler(this.BookReadView_Load);
             this.ResumeLayout(false);
 
         }

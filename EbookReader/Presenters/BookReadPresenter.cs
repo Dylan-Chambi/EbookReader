@@ -15,6 +15,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using HtmlAgilityPack;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
+using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace EbookReader.Presenters
 {
@@ -22,6 +24,10 @@ namespace EbookReader.Presenters
     {
         private IBookReadView bookReadView;
         private Ebook ebook;
+        private Dictionary<string, byte[]> images;
+        private Dictionary<string, byte[]> fonts;
+
+        private Dictionary<string, string> styles;
 
         public BookReadPresenter(IBookReadView bookReadView, Ebook ebook)
         {
@@ -30,7 +36,10 @@ namespace EbookReader.Presenters
 
             bookReadView.CurrentEbook = ebook;
             LoadChaptersList();
-            LoadChapterPages(8);
+            LoadChapterPages(1);
+            images = ebook.getImages();
+            fonts = ebook.getFonts();
+            styles = ebook.getStylesheets();
         }
 
 
@@ -50,33 +59,42 @@ namespace EbookReader.Presenters
             new PageItemPresenter(pageItemView, "");
             Control control = (UserControl)pageItemView;
             bookReadView.TableLayoutPanel.Controls.Add(control);
-            control.Dock = DockStyle.Fill;
+            control.Dock = DockStyle.None;
             pageItemView.WebBrowser.ScrollBarsEnabled = false;
 
             IPageItemView pageItemView2 = new PageItemView();
             new PageItemPresenter(pageItemView2, "");
             Control control2 = (UserControl)pageItemView2;
             bookReadView.TableLayoutPanel.Controls.Add(control2);
-            control2.Dock = DockStyle.Fill;
+            control2.Dock = DockStyle.None;
             pageItemView2.WebBrowser.ScrollBarsEnabled = false;
 
             IPageItemView pageItemViewForLoad = new PageItemView();
             new PageItemPresenter(pageItemViewForLoad, "");
             Control controlForLoad = (UserControl)pageItemViewForLoad;
             bookReadView.TableLayoutPanel.Controls.Add(controlForLoad);
-            controlForLoad.Dock = DockStyle.Fill;
+            controlForLoad.Dock = DockStyle.None;
             pageItemViewForLoad.WebBrowser.ScrollBarsEnabled = false;
             controlForLoad.Visible = false;
 
 
             control.BeginInvoke ((MethodInvoker)delegate {
+                // suspend layout
+                control.SuspendLayout();
+                control2.SuspendLayout();
+                controlForLoad.SuspendLayout();
                 control.Width = bookReadView.TableLayoutPanel.Width / 2;
                 control.Height = bookReadView.TableLayoutPanel.Height;
                 control2.Width = bookReadView.TableLayoutPanel.Width / 2;
                 control2.Height = bookReadView.TableLayoutPanel.Height;
                 controlForLoad.Width = bookReadView.TableLayoutPanel.Width / 2;
                 controlForLoad.Height = bookReadView.TableLayoutPanel.Height;
-                SplitDocument(ebook.getChaptersContent()[chapter], control.Height, pageItemViewForLoad.WebBrowser.Document.Body.ScrollRectangle.Height);
+                SplitDocument(ebook.getChaptersContent()[chapter], controlForLoad.Height);
+                // resume layout
+                control.ResumeLayout();
+                control2.ResumeLayout();
+                controlForLoad.ResumeLayout();
+
             });
 
             bookReadView.TableLayoutPanel.SizeChanged += (sender, e) =>
@@ -87,80 +105,213 @@ namespace EbookReader.Presenters
                 control2.Height = bookReadView.TableLayoutPanel.Height;
                 controlForLoad.Width = bookReadView.TableLayoutPanel.Width / 2;
                 controlForLoad.Height = bookReadView.TableLayoutPanel.Height;
-
-                SplitDocument(ebook.getChaptersContent()[chapter], control.Height, pageItemViewForLoad.WebBrowser.Document.Body.ScrollRectangle.Height);
+                SplitDocument(ebook.getChaptersContent()[chapter], controlForLoad.Height);
 
             };
 
-            void SplitDocument(string HtmlContent, int browserHeight, int documentHeight)
+            void SplitDocument(string HtmlContent, int browserHeight)
             {
                 // remvoe all content in html element
                 pageItemViewForLoad.WebBrowser.Document.Body.InnerHtml = "";
                 HtmlElement body = pageItemViewForLoad.WebBrowser.Document.Body;
+                HtmlElement head = pageItemViewForLoad.WebBrowser.Document.GetElementsByTagName("head")[0];
                 
                 List<string> pages = new List<string>();
-                int numPages = (int)Math.Ceiling((double)((double)documentHeight) / ((double)browserHeight));
 
                 HtmlDocument content = new HtmlDocument();
                 content.LoadHtml(HtmlContent);
 
                 HtmlDocument newDocument = new HtmlDocument();
-                HtmlNode head = HtmlNode.CreateNode(content.DocumentNode.SelectSingleNode("//head").OuterHtml);
-                newDocument.DocumentNode.AppendChild(head);
+                HtmlNode html = newDocument.CreateElement("html");
+                newDocument.DocumentNode.AppendChild(html);
+
+                HtmlNode headNode = HtmlNode.CreateNode("<head></head>");
+                html.AppendChild(headNode);
 
                 HtmlNode bodyNode = HtmlNode.CreateNode("<body></body>");
-                newDocument.DocumentNode.AppendChild(bodyNode);
+                html.AppendChild(bodyNode);
 
 
+                int recursiveCount = 0;
 
-                void appendElementUntilDocumentHeigth(HtmlNode htmlNode)
+                // void appendElementUntilDocumentHeigth(HtmlNode htmlNode)
+                // {
+                //     if ((htmlNode.ChildNodes.Count == 1 && htmlNode.ChildNodes[0].NodeType == HtmlNodeType.Text) || (htmlNode.ChildNodes.Count == 0 && htmlNode.NodeType != HtmlNodeType.Text))
+                //     {
+                //         if(htmlNode.Name == "img")
+                //         {
+                //             string srcPath = htmlNode.Attributes["src"].Value;
+                //             srcPath = srcPath.Replace("../", "");
+
+                //             if (htmlNode.Attributes["style"] == null)
+                //             {
+                //                 htmlNode.Attributes.Add("style", "max-width: 100% !important; max-height: 100% !important;");
+                //             }
+                //             else
+                //             {
+                //                 htmlNode.Attributes["style"].Value = "max-width: 100% !important; max-height: 100% !important;";
+                //             }
+
+                //             if (htmlNode.Attributes["src"] == null) htmlNode.Attributes.Add("src", "data:image/png;base64," + Convert.ToBase64String(images[srcPath]));
+                //             else htmlNode.Attributes["src"].Value = "data:image/png;base64," + Convert.ToBase64String(images[srcPath]);
+                //         }
+                //         bodyNode.AppendChild(htmlNode);
+                //         body.InnerHtml = bodyNode.InnerHtml;
+                //         if (pageItemViewForLoad.WebBrowser.Document.Body.ScrollRectangle.Height > browserHeight)
+                //         {
+                //             bodyNode.RemoveChild(htmlNode);
+                //             body.InnerHtml = bodyNode.InnerHtml;
+                //             pages.Add(newDocument.DocumentNode.OuterHtml);
+                //             newDocument = new HtmlDocument();
+                //             headNode = HtmlNode.CreateNode(pageItemViewForLoad.WebBrowser.Document.GetElementsByTagName("head")[0].OuterHtml);
+                //             newDocument.DocumentNode.AppendChild(headNode);
+                //             bodyNode = HtmlNode.CreateNode("<body></body>");
+                //             newDocument.DocumentNode.AppendChild(bodyNode);
+                //             bodyNode.AppendChild(htmlNode);
+                //             body.InnerHtml = bodyNode.InnerHtml;
+                //         }
+                //         return;
+                //     }
+                //     else
+                //     {
+                //         foreach (HtmlNode childNode in htmlNode.ChildNodes)
+                //         {
+                //             appendElementUntilDocumentHeigth(childNode);
+                //         }
+                //     }
+                // }
+                List<HtmlNode> treeNodes = new List<HtmlNode>();
+
+                void appendElementUntilDocumentHeigth2(HtmlNode currentNode)
                 {
-                    if ((htmlNode.ChildNodes.Count == 1 && htmlNode.ChildNodes[0].NodeType == HtmlNodeType.Text) || (htmlNode.ChildNodes.Count == 0 && htmlNode.NodeType != HtmlNodeType.Text))
+                    recursiveCount++;
+                    HtmlNode parentNode = null;
+
+                    if (treeNodes.Count > 0){
+                        parentNode = treeNodes.Last();
+                    }
+                    HtmlNode copyCurrentNode = HtmlNode.CreateNode(currentNode.OuterHtml);
+                    copyCurrentNode.RemoveAllChildren();
+
+                    if ( !((currentNode.ChildNodes.Count == 1 && currentNode.ChildNodes[0].NodeType == HtmlNodeType.Text) || (currentNode.ChildNodes.Count == 0 && currentNode.NodeType != HtmlNodeType.Text)) )
                     {
-                        HtmlElement element = pageItemViewForLoad.WebBrowser.Document.CreateElement(htmlNode.Name);
-                        if (htmlNode.HasChildNodes)
+                        if (treeNodes.Count > 0)
                         {
-                            element.InnerHtml = htmlNode.InnerHtml;
+                            parentNode.AppendChild(copyCurrentNode);
                         }
-                        body.AppendChild(element);
-                        bodyNode.ChildNodes.Add(htmlNode);
-                        if (body.ScrollRectangle.Height + 20 > browserHeight)
+                        treeNodes.Add(copyCurrentNode);
+                        foreach (HtmlNode childNode in currentNode.ChildNodes)
                         {
-                            bodyNode.RemoveChild(htmlNode);
-                            pages.Add(newDocument.DocumentNode.OuterHtml);
-                            newDocument = new HtmlDocument();
-                            head = HtmlNode.CreateNode(pageItemViewForLoad.WebBrowser.Document.GetElementsByTagName("head")[0].OuterHtml);
-                            newDocument.DocumentNode.AppendChild(head);
-
-                            element = pageItemViewForLoad.WebBrowser.Document.CreateElement(htmlNode.Name);
-                            if (htmlNode.HasChildNodes)
-                            {
-                                element.InnerHtml = htmlNode.InnerHtml;
-                            }
-
-                            body.InnerHtml = "";
-                            body.AppendChild(element);
-
-                            bodyNode = HtmlNode.CreateNode("<body></body>");
-                            newDocument.DocumentNode.AppendChild(bodyNode);
-
-                            bodyNode.ChildNodes.Add(htmlNode);
+                            appendElementUntilDocumentHeigth2(childNode);
                         }
-                        return;
                     }
                     else
                     {
-                        foreach (HtmlNode childNode in htmlNode.ChildNodes)
+                        HtmlNode tempCurrentNode = HtmlNode.CreateNode(currentNode.OuterHtml);
+                        parentNode.AppendChild(tempCurrentNode);
+                        if(tempCurrentNode.Name == "img")
                         {
-                            appendElementUntilDocumentHeigth(childNode);
+                            string srcPath = tempCurrentNode.Attributes["src"].Value;
+                            srcPath = srcPath.Replace("../", "");
+
+                            if (tempCurrentNode.Attributes["src"] == null) tempCurrentNode.Attributes.Add("src", "data:image/png;base64," + Convert.ToBase64String(images[srcPath]));
+                            else tempCurrentNode.Attributes["src"].Value = "data:image/png;base64," + Convert.ToBase64String(images[srcPath]);
+                        }
+                        body.InnerHtml = treeNodes.First().InnerHtml;
+                        bodyNode.InnerHtml = treeNodes.First().InnerHtml;
+                        if (pageItemViewForLoad.WebBrowser.Document.Body.ScrollRectangle.Height > browserHeight)
+                        {
+                            if (treeNodes.Count > 0){
+                                parentNode.RemoveChild(tempCurrentNode);
+                            }
+                            bodyNode.InnerHtml = treeNodes.First().InnerHtml;
+                            pages.Add(newDocument.DocumentNode.OuterHtml);
+                            bodyNode.InnerHtml = "";
+
+                            for (int i = 0; i < treeNodes.Count; i++)
+                            {
+                                treeNodes[i].RemoveAllChildren();
+                            }
+
+                            for (int i = treeNodes.Count - 1; i > 0; i--)
+                            {
+                                treeNodes[i - 1].AppendChild(treeNodes[i]);
+                            }
+                            parentNode.AppendChild(tempCurrentNode);
+                        }
+
+                    }
+                    treeNodes.Remove(copyCurrentNode);
+                }
+
+                void appendStylesAndFonts(HtmlNode htmlNode)
+                {
+                    if (htmlNode.Name == "style")
+                    {
+                        HtmlElement element = pageItemViewForLoad.WebBrowser.Document.CreateElement(htmlNode.Name);
+                        element.OuterHtml = htmlNode.OuterHtml;
+                        pageItemViewForLoad.WebBrowser.Document.GetElementsByTagName("head")[0].AppendChild(element);
+                    }
+                    else if (htmlNode.Name == "link")
+                    {
+                        // create style element
+                        string stylePath = htmlNode.Attributes["href"].Value;
+                        string linkType = htmlNode.Attributes["type"].Value;
+
+                        if (linkType == "text/css")
+                        {
+                            stylePath = stylePath.Replace("../", "");
+                            HtmlElement element = pageItemViewForLoad.WebBrowser.Document.CreateElement("style");
+                            string stylesheet = styles[stylePath];
+                            
+
+                            // get all font path
+                            //string[] fontPaths = Regex.Matches(stylesheet, @"url\((.*?)\)").Cast<Match>().Select(m => m.Groups[1].Value).ToArray();
+                            string[] fontPaths = new string[0];
+                            foreach (string fontPath in fontPaths)
+                            {
+                                string fontBase64 = Convert.ToBase64String(fonts[fontPath]);
+                                fontBase64 = "data:font/opentype;base64," + fontBase64;
+                                stylesheet = stylesheet.Replace(fontPath, fontBase64);
+                            }
+                            element.OuterHtml = "<style>" + stylesheet + "</style>";
+                            HtmlNode styleNode = HtmlNode.CreateNode("<style></style>");
+                            styleNode.InnerHtml = stylesheet;
+                            headNode.ChildNodes.Add(styleNode);
+                            head.AppendChild(element);
                         }
                     }
                 }
 
-                appendElementUntilDocumentHeigth(content.DocumentNode.SelectSingleNode("//body"));
+                foreach (HtmlNode childNode in content.DocumentNode.SelectNodes("//head").Nodes())
+                {
+                    appendStylesAndFonts(childNode);
+                }
+
+                pageItemViewForLoad.WebBrowser.DocumentText = newDocument.DocumentNode.OuterHtml;
+
+                appendElementUntilDocumentHeigth2(content.DocumentNode.SelectSingleNode("//body"));
+
+                
+
+
+
+                Debug.WriteLine("recursiveCount: " + recursiveCount);
+
+                if (pages.Count == 0)
+                {
+                    pages.Add(newDocument.DocumentNode.OuterHtml);
+                }
 
                 pageItemView.WebBrowser.DocumentText = pages[0];
-                pageItemView2.WebBrowser.DocumentText = pages[1];
+                if (pages.Count > 1)
+                {
+                    pageItemView2.WebBrowser.DocumentText = pages[1];
+                }else
+                {
+                    pageItemView2.WebBrowser.DocumentText = "";
+                }
+
             }
         }
 
