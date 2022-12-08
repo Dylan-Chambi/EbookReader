@@ -39,6 +39,9 @@ namespace EbookReader.Presenters
         private Control control2;
         private Control controlForLoad;
 
+        private string backgroundColor = "#ffffff";
+        private string textColor = "#000000";
+
         public BookReadPresenter(IBookReadView bookReadView, Ebook ebook)
         {
             this.bookReadView = bookReadView;
@@ -58,21 +61,21 @@ namespace EbookReader.Presenters
             new PageItemPresenter(pageItemView, "");
             control = (UserControl)pageItemView;
             bookReadView.TableLayoutPanel.Controls.Add(control);
-            control.Dock = DockStyle.None;
+            control.Dock = DockStyle.Fill;
             pageItemView.WebBrowser.ScrollBarsEnabled = false;
 
             pageItemView2 = new PageItemView();
             new PageItemPresenter(pageItemView2, "");
             control2 = (UserControl)pageItemView2;
             bookReadView.TableLayoutPanel.Controls.Add(control2);
-            control2.Dock = DockStyle.None;
+            control2.Dock = DockStyle.Fill;
             pageItemView2.WebBrowser.ScrollBarsEnabled = false;
 
             pageItemViewForLoad = new PageItemView();
             new PageItemPresenter(pageItemViewForLoad, "");
             controlForLoad = (UserControl)pageItemViewForLoad;
             bookReadView.TableLayoutPanel.Controls.Add(controlForLoad);
-            controlForLoad.Dock = DockStyle.None;
+            controlForLoad.Dock = DockStyle.Fill;
             pageItemViewForLoad.WebBrowser.ScrollBarsEnabled = false;
             controlForLoad.Visible = false;
             
@@ -82,12 +85,8 @@ namespace EbookReader.Presenters
                 control.SuspendLayout();
                 control2.SuspendLayout();
                 controlForLoad.SuspendLayout();
-                control.Width = bookReadView.TableLayoutPanel.Width / 2;
-                control.Height = bookReadView.TableLayoutPanel.Height;
-                control2.Width = bookReadView.TableLayoutPanel.Width / 2;
-                control2.Height = bookReadView.TableLayoutPanel.Height;
-                controlForLoad.Width = bookReadView.TableLayoutPanel.Width / 2;
-                controlForLoad.Height = bookReadView.TableLayoutPanel.Height;
+                controlForLoad.Width = control.Width;
+                controlForLoad.Height = control.Height;
                 LoadChapterPages(currentChapter);
                 // resume layout
                 control.ResumeLayout();
@@ -98,12 +97,8 @@ namespace EbookReader.Presenters
 
             bookReadView.TableLayoutPanel.SizeChanged += (sender, e) =>
             {
-                control.Width = bookReadView.TableLayoutPanel.Width / 2;
-                control.Height = bookReadView.TableLayoutPanel.Height;
-                control2.Width = bookReadView.TableLayoutPanel.Width / 2;
-                control2.Height = bookReadView.TableLayoutPanel.Height;
-                controlForLoad.Width = bookReadView.TableLayoutPanel.Width / 2;
-                controlForLoad.Height = bookReadView.TableLayoutPanel.Height;
+                controlForLoad.Width = control.Width;
+                controlForLoad.Height = control.Height;
                 LoadChapterPages(currentChapter);
 
             };
@@ -146,61 +141,35 @@ namespace EbookReader.Presenters
                 HtmlNode headNode = HtmlNode.CreateNode("<head></head>");
                 html.AppendChild(headNode);
 
+                HtmlNode metaEdge = HtmlNode.CreateNode("<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">");
+                headNode.AppendChild(metaEdge);
+
+                HtmlNode metaCharset = HtmlNode.CreateNode("<meta charset=\"utf-8\">");
+                headNode.AppendChild(metaCharset);
+
+                //set viewport width and height
+                HtmlNode metaViewport = HtmlNode.CreateNode("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\">");
+                headNode.AppendChild(metaViewport);
+
+                // align content to center
+                // margin positions: top, right, bottom, left
+                HtmlNode definitiveStyle = HtmlNode.CreateNode("<style> body { margin-top: 50px; margin-bottom: 0; margin-left: 50px; margin-right: 50px; display: flex-box; } </style>");
+                headNode.AppendChild(definitiveStyle);
+
+                //set theme
+                HtmlNode backgroundColorStyle = HtmlNode.CreateNode("<style> body { background-color: " + backgroundColor + "!important; color: " + textColor + "!important; } </style>");
+                headNode.AppendChild(backgroundColorStyle);
+                
                 HtmlNode bodyNode = HtmlNode.CreateNode("<body></body>");
                 html.AppendChild(bodyNode);
 
+                
 
                 int recursiveCount = 0;
 
-                // void appendElementUntilDocumentHeigth(HtmlNode htmlNode)
-                // {
-                //     if ((htmlNode.ChildNodes.Count == 1 && htmlNode.ChildNodes[0].NodeType == HtmlNodeType.Text) || (htmlNode.ChildNodes.Count == 0 && htmlNode.NodeType != HtmlNodeType.Text))
-                //     {
-                //         if(htmlNode.Name == "img")
-                //         {
-                //             string srcPath = htmlNode.Attributes["src"].Value;
-                //             srcPath = srcPath.Replace("../", "");
-
-                //             if (htmlNode.Attributes["style"] == null)
-                //             {
-                //                 htmlNode.Attributes.Add("style", "max-width: 100% !important; max-height: 100% !important;");
-                //             }
-                //             else
-                //             {
-                //                 htmlNode.Attributes["style"].Value = "max-width: 100% !important; max-height: 100% !important;";
-                //             }
-
-                //             if (htmlNode.Attributes["src"] == null) htmlNode.Attributes.Add("src", "data:image/png;base64," + Convert.ToBase64String(images[srcPath]));
-                //             else htmlNode.Attributes["src"].Value = "data:image/png;base64," + Convert.ToBase64String(images[srcPath]);
-                //         }
-                //         bodyNode.AppendChild(htmlNode);
-                //         body.InnerHtml = bodyNode.InnerHtml;
-                //         if (pageItemViewForLoad.WebBrowser.Document.Body.ScrollRectangle.Height > browserHeight)
-                //         {
-                //             bodyNode.RemoveChild(htmlNode);
-                //             body.InnerHtml = bodyNode.InnerHtml;
-                //             pages.Add(newDocument.DocumentNode.OuterHtml);
-                //             newDocument = new HtmlDocument();
-                //             headNode = HtmlNode.CreateNode(pageItemViewForLoad.WebBrowser.Document.GetElementsByTagName("head")[0].OuterHtml);
-                //             newDocument.DocumentNode.AppendChild(headNode);
-                //             bodyNode = HtmlNode.CreateNode("<body></body>");
-                //             newDocument.DocumentNode.AppendChild(bodyNode);
-                //             bodyNode.AppendChild(htmlNode);
-                //             body.InnerHtml = bodyNode.InnerHtml;
-                //         }
-                //         return;
-                //     }
-                //     else
-                //     {
-                //         foreach (HtmlNode childNode in htmlNode.ChildNodes)
-                //         {
-                //             appendElementUntilDocumentHeigth(childNode);
-                //         }
-                //     }
-                // }
                 List<HtmlNode> treeNodes = new List<HtmlNode>();
 
-                void appendElementUntilDocumentHeigth2(HtmlNode currentNode)
+                void appendElementUntilDocumentHeigth(HtmlNode currentNode)
                 {
                     recursiveCount++;
                     HtmlNode parentNode = null;
@@ -220,7 +189,7 @@ namespace EbookReader.Presenters
                         treeNodes.Add(copyCurrentNode);
                         foreach (HtmlNode childNode in currentNode.ChildNodes)
                         {
-                            appendElementUntilDocumentHeigth2(childNode);
+                            appendElementUntilDocumentHeigth(childNode);
                         }
                     }
                     else
@@ -232,12 +201,15 @@ namespace EbookReader.Presenters
                             string srcPath = tempCurrentNode.Attributes["src"].Value;
                             srcPath = srcPath.Replace("../", "");
 
+                            if (tempCurrentNode.Attributes["style"] == null) tempCurrentNode.Attributes.Add("style", "max-width:80vw;max-height:80vh;");
+                            else tempCurrentNode.Attributes["style"].Value = "max-width:80vw;max-height:80vh;";
+
                             if (tempCurrentNode.Attributes["src"] == null) tempCurrentNode.Attributes.Add("src", "data:image/png;base64," + Convert.ToBase64String(images[srcPath]));
                             else tempCurrentNode.Attributes["src"].Value = "data:image/png;base64," + Convert.ToBase64String(images[srcPath]);
                         }
                         body.InnerHtml = treeNodes.First().InnerHtml;
                         bodyNode.InnerHtml = treeNodes.First().InnerHtml;
-                        if (pageItemViewForLoad.WebBrowser.Document.Body.ScrollRectangle.Height > controlForLoad.Height)
+                        if (pageItemViewForLoad.WebBrowser.Document.Body.ScrollRectangle.Height + 150 > controlForLoad.Height)
                         {
                             if (treeNodes.Count > 0){
                                 parentNode.RemoveChild(tempCurrentNode);
@@ -266,9 +238,7 @@ namespace EbookReader.Presenters
                 {
                     if (htmlNode.Name == "style")
                     {
-                        HtmlElement element = pageItemViewForLoad.WebBrowser.Document.CreateElement(htmlNode.Name);
-                        element.OuterHtml = htmlNode.OuterHtml;
-                        pageItemViewForLoad.WebBrowser.Document.GetElementsByTagName("head")[0].AppendChild(element);
+                        headNode.ChildNodes.Add(htmlNode);
                     }
                     else if (htmlNode.Name == "link")
                     {
@@ -279,24 +249,21 @@ namespace EbookReader.Presenters
                         if (linkType == "text/css")
                         {
                             stylePath = stylePath.Replace("../", "");
-                            HtmlElement element = pageItemViewForLoad.WebBrowser.Document.CreateElement("style");
                             string stylesheet = styles[stylePath];
                             
 
                             // get all font path
-                            //string[] fontPaths = Regex.Matches(stylesheet, @"url\((.*?)\)").Cast<Match>().Select(m => m.Groups[1].Value).ToArray();
-                            string[] fontPaths = new string[0];
+                            string[] fontPaths = Regex.Matches(stylesheet, @"url\((.*?)\)").Cast<Match>().Select(m => m.Groups[1].Value).ToArray();
+                            // string[] fontPaths = new string[0];
                             foreach (string fontPath in fontPaths)
                             {
                                 string fontBase64 = Convert.ToBase64String(fonts[fontPath]);
                                 fontBase64 = "data:font/opentype;base64," + fontBase64;
                                 stylesheet = stylesheet.Replace(fontPath, fontBase64);
                             }
-                            element.OuterHtml = "<style>" + stylesheet + "</style>";
                             HtmlNode styleNode = HtmlNode.CreateNode("<style></style>");
                             styleNode.InnerHtml = stylesheet;
                             headNode.ChildNodes.Add(styleNode);
-                            head.AppendChild(element);
                         }
                     }
                 }
@@ -306,9 +273,9 @@ namespace EbookReader.Presenters
                     appendStylesAndFonts(childNode);
                 }
 
-                pageItemViewForLoad.WebBrowser.DocumentText = newDocument.DocumentNode.OuterHtml;
+                pageItemViewForLoad.WebBrowser.DocumentText = newDocument.DocumentNode.OuterHtml.Clone().ToString();
 
-                appendElementUntilDocumentHeigth2(content.DocumentNode.SelectSingleNode("//body"));
+                appendElementUntilDocumentHeigth(content.DocumentNode.SelectSingleNode("//body"));
 
                 
 
