@@ -17,12 +17,7 @@ namespace EbookReader.Presenters.IndexItem
             this.indexItemView = indexItemView;
 
             indexItemView.IndexItemTitle = indexTitle;
-            indexItemView.IndexItemClicked += IndexItemView_IndexItemClicked;
-        }
-
-        private void IndexItemView_IndexItemClicked(object sender, EventArgs e)
-        {
-            Debug.WriteLine("Index item clicked " + indexItemView.IndexItemPageNumber);
+            indexItemView.IndexItemPageNumber = indexPageNumber;
         }
     }
 }

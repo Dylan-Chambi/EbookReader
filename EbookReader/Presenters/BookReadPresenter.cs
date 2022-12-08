@@ -29,55 +29,54 @@ namespace EbookReader.Presenters
 
         private Dictionary<string, string> styles;
 
+        private int currentChapter = 1;
+
+        private IPageItemView pageItemView;
+        private IPageItemView pageItemView2;
+        private IPageItemView pageItemViewForLoad;
+
+        private Control control;
+        private Control control2;
+        private Control controlForLoad;
+
         public BookReadPresenter(IBookReadView bookReadView, Ebook ebook)
         {
             this.bookReadView = bookReadView;
             this.ebook = ebook;
 
             bookReadView.CurrentEbook = ebook;
+            InitPageItems();
             LoadChaptersList();
-            LoadChapterPages(1);
             images = ebook.getImages();
             fonts = ebook.getFonts();
             styles = ebook.getStylesheets();
         }
 
-
-        public void LoadChaptersList()
+        public void InitPageItems()
         {
-            foreach (Chapter chapter in ebook.getChapters())
-            {
-                IIndexItemView indexItemView = new IndexItemView();
-                new IndexItemPresenter(indexItemView, chapter.ChapterTitle, chapter.ChapterIndexPage);
-                bookReadView.FlowLayoutPanel.Controls.Add((Control)indexItemView);
-            }
-        }
-
-        public void LoadChapterPages(int chapter)
-        {
-            IPageItemView pageItemView = new PageItemView();
+            pageItemView = new PageItemView();
             new PageItemPresenter(pageItemView, "");
-            Control control = (UserControl)pageItemView;
+            control = (UserControl)pageItemView;
             bookReadView.TableLayoutPanel.Controls.Add(control);
             control.Dock = DockStyle.None;
             pageItemView.WebBrowser.ScrollBarsEnabled = false;
 
-            IPageItemView pageItemView2 = new PageItemView();
+            pageItemView2 = new PageItemView();
             new PageItemPresenter(pageItemView2, "");
-            Control control2 = (UserControl)pageItemView2;
+            control2 = (UserControl)pageItemView2;
             bookReadView.TableLayoutPanel.Controls.Add(control2);
             control2.Dock = DockStyle.None;
             pageItemView2.WebBrowser.ScrollBarsEnabled = false;
 
-            IPageItemView pageItemViewForLoad = new PageItemView();
+            pageItemViewForLoad = new PageItemView();
             new PageItemPresenter(pageItemViewForLoad, "");
-            Control controlForLoad = (UserControl)pageItemViewForLoad;
+            controlForLoad = (UserControl)pageItemViewForLoad;
             bookReadView.TableLayoutPanel.Controls.Add(controlForLoad);
             controlForLoad.Dock = DockStyle.None;
             pageItemViewForLoad.WebBrowser.ScrollBarsEnabled = false;
             controlForLoad.Visible = false;
-
-
+            
+            
             control.BeginInvoke ((MethodInvoker)delegate {
                 // suspend layout
                 control.SuspendLayout();
@@ -89,7 +88,7 @@ namespace EbookReader.Presenters
                 control2.Height = bookReadView.TableLayoutPanel.Height;
                 controlForLoad.Width = bookReadView.TableLayoutPanel.Width / 2;
                 controlForLoad.Height = bookReadView.TableLayoutPanel.Height;
-                SplitDocument(ebook.getChaptersContent()[chapter], controlForLoad.Height);
+                LoadChapterPages(currentChapter);
                 // resume layout
                 control.ResumeLayout();
                 control2.ResumeLayout();
@@ -105,13 +104,32 @@ namespace EbookReader.Presenters
                 control2.Height = bookReadView.TableLayoutPanel.Height;
                 controlForLoad.Width = bookReadView.TableLayoutPanel.Width / 2;
                 controlForLoad.Height = bookReadView.TableLayoutPanel.Height;
-                SplitDocument(ebook.getChaptersContent()[chapter], controlForLoad.Height);
+                LoadChapterPages(currentChapter);
 
             };
+        }
 
-            void SplitDocument(string HtmlContent, int browserHeight)
+
+        public void LoadChaptersList()
+        {
+            foreach (Chapter chapter in ebook.getChapters())
             {
-                // remvoe all content in html element
+                IIndexItemView indexItemView = new IndexItemView();
+                new IndexItemPresenter(indexItemView, chapter.ChapterTitle, chapter.ChapterIndexPage);
+                Control control = (UserControl)indexItemView;
+                bookReadView.ListIndexTable.Controls.Add(control);
+                control.Dock = DockStyle.Top;
+                indexItemView.IndexItemButton.Click += (sender, e) =>
+                {
+                    currentChapter = indexItemView.IndexItemPageNumber;
+                    LoadChapterPages(currentChapter);
+                    Debug.WriteLine("Chapter: " + currentChapter);
+                };
+            }
+        }
+
+        public void LoadChapterPages(int chapter)
+        {
                 pageItemViewForLoad.WebBrowser.Document.Body.InnerHtml = "";
                 HtmlElement body = pageItemViewForLoad.WebBrowser.Document.Body;
                 HtmlElement head = pageItemViewForLoad.WebBrowser.Document.GetElementsByTagName("head")[0];
@@ -119,7 +137,7 @@ namespace EbookReader.Presenters
                 List<string> pages = new List<string>();
 
                 HtmlDocument content = new HtmlDocument();
-                content.LoadHtml(HtmlContent);
+                content.LoadHtml(ebook.getChaptersContent()[chapter]);
 
                 HtmlDocument newDocument = new HtmlDocument();
                 HtmlNode html = newDocument.CreateElement("html");
@@ -219,7 +237,7 @@ namespace EbookReader.Presenters
                         }
                         body.InnerHtml = treeNodes.First().InnerHtml;
                         bodyNode.InnerHtml = treeNodes.First().InnerHtml;
-                        if (pageItemViewForLoad.WebBrowser.Document.Body.ScrollRectangle.Height > browserHeight)
+                        if (pageItemViewForLoad.WebBrowser.Document.Body.ScrollRectangle.Height > controlForLoad.Height)
                         {
                             if (treeNodes.Count > 0){
                                 parentNode.RemoveChild(tempCurrentNode);
@@ -311,8 +329,6 @@ namespace EbookReader.Presenters
                 {
                     pageItemView2.WebBrowser.DocumentText = "";
                 }
-
-            }
         }
 
     }

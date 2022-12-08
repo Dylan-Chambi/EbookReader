@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace EbookReader.Views.IndexItem
 {
@@ -11,6 +12,7 @@ namespace EbookReader.Views.IndexItem
         // Properties
         string IndexItemTitle { get; set; }
         int IndexItemPageNumber { get; set; }
+        Button IndexItemButton { get; }
 
         // Events
         event EventHandler IndexItemClicked;

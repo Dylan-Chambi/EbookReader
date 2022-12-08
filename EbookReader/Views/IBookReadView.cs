@@ -11,7 +11,7 @@ namespace EbookReader.Views
     public interface IBookReadView
     {
         Ebook CurrentEbook { get; set; }
-        FlowLayoutPanel FlowLayoutPanel { get; }
+        TableLayoutPanel ListIndexTable { get; }
         TableLayoutPanel TableLayoutPanel { get; }
 
 

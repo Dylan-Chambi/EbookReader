@@ -20,8 +20,10 @@ namespace EbookReader.Views.IndexItem
         }
 
         public int IndexItemPageNumber { get => indexItemPageNumber; set => indexItemPageNumber = value; }
-        public string IndexItemTitle { get => labelTitle.Text; set => labelTitle.Text = value; }
+        public string IndexItemTitle { get => this.button1.Text; set => this.button1.Text = value; }
+        public Button IndexItemButton { get => this.button1; }
         
         public event EventHandler IndexItemClicked;
+
     }
 }

@@ -30,9 +30,20 @@ namespace EbookReader.Models
         public override List<Chapter> getChapters()
         {
             List<Chapter> chapters = new List<Chapter>();
+
+            List<string> chaptersContent = new List<string>();
+
+            foreach (EpubTextContentFile textContentFile in eBook.ReadingOrder)
+            {
+                chaptersContent.Add(textContentFile.FilePathInEpubArchive);
+            }
+
             foreach (EpubNavigationItem navigationItem in eBook.Navigation)
             {
-                chapters.Add(new Chapter(navigationItem.Title, 0));
+                EpubNavigationItemLink navigationItemLink = navigationItem.Link;
+                int index = chaptersContent.IndexOf(navigationItemLink.ContentFilePathInEpubArchive);
+                Debug.WriteLine("Chapter: " + navigationItem.Title + " " + index);
+                chapters.Add(new Chapter(navigationItem.Title, index));
             }
             return chapters;
         }
