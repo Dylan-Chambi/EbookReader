@@ -100,7 +100,43 @@ namespace EbookReader.Presenters
 
             mainView.TableLayoutPanel.ColumnCount = maxWidth / (itemUserControlTemp.Width + mainView.TableLayoutPanel.Margin.Horizontal/2 + mainView.TableLayoutPanel.Padding.Horizontal/2);
 
+            EbookItemViewAdd ebookItemViewAdd = new EbookItemViewAdd();
+            new EbookItemViewAddPresenter(ebookItemViewAdd);
+
+
             int widthTable = mainView.TableLayoutPanel.ColumnCount * (itemUserControlTemp.Width + mainView.TableLayoutPanel.Margin.Horizontal/2 + mainView.TableLayoutPanel.Padding.Horizontal/2);
+           
+            mainView.TableLayoutPanel.Controls.Add(ebookItemViewAdd.EbookItemAddUserControl);
+
+            ebookItemViewAdd.ButtonAdd.Click += (sender, e) => {
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                // only allow to select one file and .epub
+                openFileDialog.Multiselect = false;
+                openFileDialog.Filter = "Epub files (*.epub)|*.epub";
+                
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    foreach (string fileName in openFileDialog.FileNames)
+                    {
+                        // check if file is already in database
+                        if (mainViewRepository.GetEbookItems().Where(x => x.EbookPath == fileName).Count() == 0)
+                        {
+                            // add to database
+                            mainViewRepository.AddEbookItem(new EbookEpub(fileName));
+                            // add to table
+                            IEbookItemView ebookItemView = new EbookItemView();
+                            new EbookItemPresenter(ebookItemView, mainViewRepository.GetEbookItems().Where(x => x.EbookPath == fileName).First());
+                            UserControl itemUserControl = ebookItemView.EbookItemUserControl;
+                            mainView.TableLayoutPanel.Controls.Add(itemUserControl);
+                        }
+                        else
+                        {
+                            MessageBox.Show("File already in database");
+                        }
+                    }
+                }
+            };
+
             foreach (Ebook ebook in mainViewRepository.GetEbookItems())
             {
                 IEbookItemView ebookItemView = new EbookItemView();

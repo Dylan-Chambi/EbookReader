@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,37 +10,47 @@ namespace EbookReader.Models
 {
     public class MainViewRepository : IMainViewRepository
     {
+        private List<Ebook> ebookItems;
+        private SQLiteConnection sqliteConnection;
+
+        public MainViewRepository()
+        {
+            ebookItems = new List<Ebook>();
+            string projectPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string databasePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Path.GetDirectoryName(projectPath)), "Resources", "ebooksDB.db");
+
+            sqliteConnection = new SQLiteConnection("Data Source=" + databasePath);
+
+            sqliteConnection.Open();
+
+            Debug.WriteLine(sqliteConnection.State);
+
+            // load all the ebooks from the database
+            SQLiteCommand sqliteCommand = new SQLiteCommand("SELECT * FROM Ebooks", sqliteConnection);
+            SQLiteDataReader sqliteDataReader = sqliteCommand.ExecuteReader();
+
+            while (sqliteDataReader.Read())
+            {
+                Debug.WriteLine(sqliteDataReader["EbookPath"].ToString());
+                ebookItems.Add(new EbookEpub(sqliteDataReader["EbookPath"].ToString()));
+            }
+        }
+
         public void AddEbookItem(Ebook ebookItem)
         {
-            throw new NotImplementedException();
+            ebookItems.Add(ebookItem);
+            // add the ebook to the database
+            
+            SQLiteCommandBuilder sqliteCommandBuilder = new SQLiteCommandBuilder();
+            SQLiteCommand sqliteCommand = new SQLiteCommand("INSERT INTO Ebooks (EbookPath) VALUES (@EbookPath)", sqliteConnection);
+            sqliteCommand.Parameters.AddWithValue("@EbookPath", ebookItem.EbookPath);
+            sqliteCommand.ExecuteNonQuery();
+
+
         }
 
         public List<Ebook> GetEbookItems()
         {
-            EbookEpub epub1 = new EbookEpub(@"C:\\Users\\DylanPC\\source\\repos\\EbookReader\\EbookReader\\Resources\\Batman_ Nightwalker - Marie Lu.epub");
-            EbookEpub epub2 = new EbookEpub(@"C:\\Users\\DylanPC\\source\\repos\\EbookReader\\EbookReader\\Resources\\Alices Adventures in Wonderland.epub");
-            EbookEpub epub3 = new EbookEpub(@"C:\\Users\\DylanPC\\source\\repos\\EbookReader\\EbookReader\\Resources\\Batman_ Nightwalker - Marie Lu.epub");
-            EbookEpub epub4 = new EbookEpub(@"C:\\Users\\DylanPC\\source\\repos\\EbookReader\\EbookReader\\Resources\\Alices Adventures in Wonderland.epub");
-            
-            List<Ebook> ebookItems = new List<Ebook>();
-
-            ebookItems.Add(epub1);
-            ebookItems.Add(epub2);
-            ebookItems.Add(epub3);
-            ebookItems.Add(epub4);
-            ebookItems.Add(epub1);
-            ebookItems.Add(epub2);
-            ebookItems.Add(epub3);
-            ebookItems.Add(epub4);
-            ebookItems.Add(epub1);
-            ebookItems.Add(epub2);
-            ebookItems.Add(epub3);
-            ebookItems.Add(epub4);
-            ebookItems.Add(epub1);
-            ebookItems.Add(epub2);
-            ebookItems.Add(epub3);
-            ebookItems.Add(epub4);
-
             return ebookItems;
         }
 

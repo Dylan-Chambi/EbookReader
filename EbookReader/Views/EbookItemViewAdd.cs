@@ -8,13 +8,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace EbookReader.Views.EbookItemViewAdd
+namespace EbookReader.Views
 {
-    public partial class UserControl1 : UserControl
+    public partial class EbookItemViewAdd : UserControl, IEbookItemViewAdd
     {
-        public UserControl1()
+        public EbookItemViewAdd()
         {
             InitializeComponent();
         }
+
+        public Button ButtonAdd { get => this.button1;}
+        public UserControl EbookItemAddUserControl { get => this; }
     }
 }

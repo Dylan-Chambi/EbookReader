@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
-namespace EbookReader.Views.EbookItemViewAdd
+namespace EbookReader.Views
 {
-    internal interface IEbookItemViewAdd
+    public interface IEbookItemViewAdd
     {
+        Button ButtonAdd { get; }
     }
 }

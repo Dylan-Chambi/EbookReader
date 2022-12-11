@@ -63,7 +63,7 @@ namespace EbookReader.Presenters
 
         private FormWindowState oldWindowState;
 
-        private bool firstInvoke = true;
+        private Timer myTimer = new Timer();
 
 
         public BookReadPresenter(IBookReadView bookReadView, Ebook ebook)
@@ -83,6 +83,34 @@ namespace EbookReader.Presenters
             {
                 bookReadView.ListIndexTable.Height = bookReadView.EbookReadForm.Height - bookReadView.ListIndexTable.Location.Y - 20;
             };
+
+            // execute after 1 second
+            myTimer.Interval = 200;
+            myTimer.Tick += new EventHandler(
+                (sender, e) =>
+                {
+                    oldWindowState = bookReadView.EbookReadForm.WindowState;
+                    controlForLoad.Width = control.Width;
+                    controlForLoad.Height = control.Height;
+
+                    currentPage = (currentPage * currentBrowserHeight * currentBrowserWidth) / (controlForLoad.Height * controlForLoad.Width);
+
+                    if (currentPage % 2 == 1)
+                    {
+                        currentPage--;
+                    }
+                    LoadChapterPages(currentChapter);
+                    SetBrowsersDocumentPages();
+                    currentBrowserHeight = controlForLoad.Height;
+                    currentBrowserWidth = controlForLoad.Width;
+
+                    bookReadView.EbookReadForm.StartPosition = FormStartPosition.CenterScreen;
+                    myTimer.Stop();
+                }
+            );
+            
+            myTimer.Start();
+
 
         }
 
@@ -123,12 +151,11 @@ namespace EbookReader.Presenters
                 HandleChaptersChange(currentChapter);
                 currentBrowserHeight = controlForLoad.Height;
                 currentBrowserWidth = controlForLoad.Width;
-                firstInvoke = false;
             });
 
             bookReadView.EbookReadForm.ResizeEnd += (sender, e) =>
             {
-                if (oldSize != bookReadView.EbookReadForm.Size && !firstInvoke)
+                if (oldSize != bookReadView.EbookReadForm.Size)
                 {
                     oldSize = bookReadView.EbookReadForm.Size;
                     controlForLoad.Width = control.Width;
@@ -149,7 +176,7 @@ namespace EbookReader.Presenters
 
             bookReadView.EbookReadForm.Resize += (sender, e) =>
             {
-                if (oldWindowState != bookReadView.EbookReadForm.WindowState && !firstInvoke)
+                if (oldWindowState != bookReadView.EbookReadForm.WindowState)
                 {
                     oldWindowState = bookReadView.EbookReadForm.WindowState;
                     controlForLoad.Width = control.Width;
@@ -321,7 +348,10 @@ namespace EbookReader.Presenters
                 {
                     e.IsInputKey = true;
                 });
-                buttons.Add(indexItemView.IndexItemPageNumber, indexItemView.IndexItemButton);
+                // check if key is not in dictionary
+                if (!buttons.ContainsKey(indexItemView.IndexItemPageNumber)){
+                    buttons.Add(indexItemView.IndexItemPageNumber, indexItemView.IndexItemButton);
+                }
             }
         }
 
