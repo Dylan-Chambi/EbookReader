@@ -13,6 +13,7 @@ namespace EbookReader.Views
         Ebook CurrentEbook { get; set; }
         TableLayoutPanel ListIndexTable { get; }
         TableLayoutPanel TableLayoutPanel { get; }
+        Form EbookReadForm { get; }
 
 
         //event EventHandler BookReadViewLoad;

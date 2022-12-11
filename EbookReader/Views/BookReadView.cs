@@ -16,12 +16,15 @@ namespace EbookReader.Views
         public BookReadView()
         {
             InitializeComponent();
+            this.KeyPreview = true;
         }
 
         private Ebook currentEbook;
 
         public Ebook CurrentEbook { get => currentEbook; set => currentEbook = value; }
+        public Form EbookReadForm { get => this; }
         public TableLayoutPanel ListIndexTable { get => this.tableLayoutPanel2; }
         public TableLayoutPanel TableLayoutPanel { get => this.tableLayoutPanel1; }
+
     }
 }

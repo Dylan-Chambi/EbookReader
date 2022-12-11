@@ -42,7 +42,6 @@ namespace EbookReader.Models
             {
                 EpubNavigationItemLink navigationItemLink = navigationItem.Link;
                 int index = chaptersContent.IndexOf(navigationItemLink.ContentFilePathInEpubArchive);
-                Debug.WriteLine("Chapter: " + navigationItem.Title + " " + index);
                 chapters.Add(new Chapter(navigationItem.Title, index));
             }
             return chapters;
