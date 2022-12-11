@@ -76,20 +76,20 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\Utils.cs" />
-    <Compile Include="Views\BookReadView.cs">
+    <Compile Include="Views\BookReadView\BookReadView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\BookReadView.Designer.cs">
+    <Compile Include="Views\BookReadView\BookReadView.Designer.cs">
       <DependentUpon>BookReadView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\EbookItemView.cs">
+    <Compile Include="Views\EbookItemView\EbookItemView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Views\EbookItemView.Designer.cs">
+    <Compile Include="Views\EbookItemView\EbookItemView.Designer.cs">
       <DependentUpon>EbookItemView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Views\IBookReadView.cs" />
-    <Compile Include="Views\IEbookItemView.cs" />
+    <Compile Include="Views\BookReadView\IBookReadView.cs" />
+    <Compile Include="Views\EbookItemView\IEbookItemView.cs" />
     <Compile Include="Views\IMainView.cs" />
     <Compile Include="Views\IndexItem\IIndexItemView.cs" />
     <Compile Include="Views\IndexItem\IndexItemView.cs">
@@ -121,10 +121,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Views\BookReadView.resx">
+    <EmbeddedResource Include="Views\BookReadView\BookReadView.resx">
       <DependentUpon>BookReadView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\EbookItemView.resx">
+    <EmbeddedResource Include="Views\EbookItemView\EbookItemView.resx">
       <DependentUpon>EbookItemView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\IndexItem\IndexItemView.resx">

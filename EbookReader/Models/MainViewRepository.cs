@@ -26,6 +26,18 @@ namespace EbookReader.Models
             ebookItems.Add(epub2);
             ebookItems.Add(epub3);
             ebookItems.Add(epub4);
+            ebookItems.Add(epub1);
+            ebookItems.Add(epub2);
+            ebookItems.Add(epub3);
+            ebookItems.Add(epub4);
+            ebookItems.Add(epub1);
+            ebookItems.Add(epub2);
+            ebookItems.Add(epub3);
+            ebookItems.Add(epub4);
+            ebookItems.Add(epub1);
+            ebookItems.Add(epub2);
+            ebookItems.Add(epub3);
+            ebookItems.Add(epub4);
 
             return ebookItems;
         }

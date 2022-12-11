@@ -69,5 +69,7 @@ namespace EbookReader.Views
         }
         public EbookType EbookType { get => ebookType; set => ebookType = value; }
 
+        public UserControl EbookItemUserControl { get => this; }
+
     }
 }

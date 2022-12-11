@@ -11,7 +11,11 @@ namespace EbookReader.Views
     public interface IMainView
     {
         List<Ebook> EbookItems { get; set; }
-        FlowLayoutPanel FlowLayoutPanel { get; }
+        TableLayoutPanel TableLayoutPanel { get; }
+
+        TextBox SearchTextBox { get; }
+
+        Form MainViewForm { get; }
 
         //event EventHandler EbookItemClicked;
 

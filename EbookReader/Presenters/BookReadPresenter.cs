@@ -59,6 +59,10 @@ namespace EbookReader.Presenters
         private Control prevButton;
         private Dictionary<int, Control> buttons = new Dictionary<int, Control>();
 
+        private Size oldSize;
+
+        private FormWindowState oldWindowState;
+
         private bool firstInvoke = true;
 
 
@@ -77,7 +81,7 @@ namespace EbookReader.Presenters
 
             bookReadView.ListIndexTable.SizeChanged += (sender, e) =>
             {
-                bookReadView.ListIndexTable.Height = bookReadView.EbookReadForm.Height - bookReadView.ListIndexTable.Location.Y - 10;
+                bookReadView.ListIndexTable.Height = bookReadView.EbookReadForm.Height - bookReadView.ListIndexTable.Location.Y - 20;
             };
 
         }
@@ -122,25 +126,48 @@ namespace EbookReader.Presenters
                 firstInvoke = false;
             });
 
-            bookReadView.TableLayoutPanel.SizeChanged += (sender, e) =>
+            bookReadView.EbookReadForm.ResizeEnd += (sender, e) =>
             {
-                if (firstInvoke)
+                if (oldSize != bookReadView.EbookReadForm.Size && !firstInvoke)
                 {
-                    return;
+                    oldSize = bookReadView.EbookReadForm.Size;
+                    controlForLoad.Width = control.Width;
+                    controlForLoad.Height = control.Height;
+
+                    currentPage = (currentPage * currentBrowserHeight * currentBrowserWidth) / (controlForLoad.Height * controlForLoad.Width);
+
+                    if (currentPage % 2 == 1)
+                    {
+                        currentPage--;
+                    }
+                    LoadChapterPages(currentChapter);
+                    SetBrowsersDocumentPages();
+                    currentBrowserHeight = controlForLoad.Height;
+                    currentBrowserWidth = controlForLoad.Width;
                 }
-                controlForLoad.Width = control.Width;
-                controlForLoad.Height = control.Height;
+            };
 
-                currentPage = (currentPage * currentBrowserHeight * currentBrowserWidth) / (controlForLoad.Height * controlForLoad.Width);
-
-                if (currentPage % 2 == 1)
+            bookReadView.EbookReadForm.Resize += (sender, e) =>
+            {
+                if (oldWindowState != bookReadView.EbookReadForm.WindowState && !firstInvoke)
                 {
-                    currentPage--;
+                    oldWindowState = bookReadView.EbookReadForm.WindowState;
+                    controlForLoad.Width = control.Width;
+                    controlForLoad.Height = control.Height;
+
+                    currentPage = (currentPage * currentBrowserHeight * currentBrowserWidth) / (controlForLoad.Height * controlForLoad.Width);
+
+                    if (currentPage % 2 == 1)
+                    {
+                        currentPage--;
+                    }
+                    LoadChapterPages(currentChapter);
+                    SetBrowsersDocumentPages();
+                    currentBrowserHeight = controlForLoad.Height;
+                    currentBrowserWidth = controlForLoad.Width;
+
+                    bookReadView.EbookReadForm.StartPosition = FormStartPosition.CenterScreen;
                 }
-                LoadChapterPages(currentChapter);
-                SetBrowsersDocumentPages();
-                currentBrowserHeight = controlForLoad.Height;
-                currentBrowserWidth = controlForLoad.Width;
             };
 
             // avoid web browser preview key down event to be fired twice
@@ -250,6 +277,10 @@ namespace EbookReader.Presenters
 
         private void SetBrowsersDocumentPages()
         {
+            if (currentPage % 2 == 1) //TODO: check if this is solution for the problem
+            {
+                currentPage--;
+            }
             pageItemView.WebBrowser.DocumentText = pages[currentPage];
             if (currentPage < pages.Count - 1)
             {

@@ -18,7 +18,11 @@ namespace EbookReader.Views
 
 
         public List<Ebook> EbookItems { get => ebookItems; set => ebookItems = value; }
-        public FlowLayoutPanel FlowLayoutPanel { get => flowLayoutPanel; }
+        public TableLayoutPanel TableLayoutPanel { get => tableLayoutPanel1; }
+
+        public TextBox SearchTextBox { get => textBox1; }
+
+        public Form MainViewForm { get => this; }
 
         public MainView()
         {
@@ -27,7 +31,7 @@ namespace EbookReader.Views
             {
                 Debug.WriteLine("MainView clicked");
             };
-            foreach (UserControl uc in flowLayoutPanel.Controls)
+            foreach (UserControl uc in tableLayoutPanel1.Controls)
             {
                 uc.Click += delegate
                 {
@@ -38,7 +42,7 @@ namespace EbookReader.Views
 
         public void AsoociateAndRaiseEvents()
         {
-            foreach (Form form in flowLayoutPanel.Controls)
+            foreach (Form form in tableLayoutPanel1.Controls)
             {
                 if (form is IEbookItemView)
                 {

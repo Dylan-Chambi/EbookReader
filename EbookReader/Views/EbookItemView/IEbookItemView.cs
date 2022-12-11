@@ -18,6 +18,8 @@ namespace EbookReader.Views
         Image EbookCoverImage { get; set; }
         EbookType EbookType { get; set; }
 
+        UserControl EbookItemUserControl { get; }
+
         // Events
         event EventHandler EbookItemClicked;
          
