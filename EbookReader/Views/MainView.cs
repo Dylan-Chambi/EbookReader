@@ -1,4 +1,5 @@
 ﻿using EbookReader.Models;
+using Guna.UI2.WinForms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,29 +21,18 @@ namespace EbookReader.Views
         public List<Ebook> EbookItems { get => ebookItems; set => ebookItems = value; }
         public TableLayoutPanel TableLayoutPanel { get => tableLayoutPanel1; }
 
-        public TextBox SearchTextBox { get => textBox1; }
+        public Guna2TextBox SearchTextBox { get => this.guna2TextBox1; }
 
         public Form MainViewForm { get => this; }
 
         public MainView()
         {
             InitializeComponent();
-            this.Click += delegate
-            {
-                Debug.WriteLine("MainView clicked");
-            };
-            foreach (UserControl uc in tableLayoutPanel1.Controls)
-            {
-                uc.Click += delegate
-                {
-                    Debug.WriteLine("UserControl clicked");
-                };
-            }
         }
 
         public void AsoociateAndRaiseEvents()
         {
-            foreach (Form form in tableLayoutPanel1.Controls)
+            foreach (Form form in TableLayoutPanel.Controls)
             {
                 if (form is IEbookItemView)
                 {

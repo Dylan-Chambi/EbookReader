@@ -68,17 +68,10 @@ namespace EbookReader.Presenters
                 }
             };
 
-            mainView.SearchTextBox.GotFocus += (sender, e) => {
-                mainView.SearchTextBox.Text = "";
-                mainView.SearchTextBox.ForeColor = Color.Black;
-            };
-
-            mainView.SearchTextBox.LostFocus += (sender, e) => {
-                if (mainView.SearchTextBox.Text == "")
-                {
-                    mainView.SearchTextBox.Text = "Search a book here...";
-                    mainView.SearchTextBox.ForeColor = Color.Gray;
-                }
+            mainView.SearchTextBox.IconLeftCursor = Cursors.Hand;
+            
+            mainView.SearchTextBox.IconLeftClick += (sender, e) => {
+                loadAllEbooksList(nameFilter);
             };
             
         }
@@ -86,8 +79,8 @@ namespace EbookReader.Presenters
 
         public void loadAllEbooksList(string nameFilter)
         {
-            int maxHeight = mainView.MainViewForm.Height;
-            int maxWidth = mainView.MainViewForm.Width;
+            int maxHeight = mainView.TableLayoutPanel.Height;
+            int maxWidth = mainView.TableLayoutPanel.Width;
 
             // reset table layout
             mainView.TableLayoutPanel.Controls.Clear();
@@ -103,10 +96,9 @@ namespace EbookReader.Presenters
             EbookItemViewAdd ebookItemViewAdd = new EbookItemViewAdd();
             new EbookItemViewAddPresenter(ebookItemViewAdd);
 
-
-            int widthTable = mainView.TableLayoutPanel.ColumnCount * (itemUserControlTemp.Width + mainView.TableLayoutPanel.Margin.Horizontal/2 + mainView.TableLayoutPanel.Padding.Horizontal/2);
-           
             mainView.TableLayoutPanel.Controls.Add(ebookItemViewAdd.EbookItemAddUserControl);
+
+        
 
             ebookItemViewAdd.ButtonAdd.Click += (sender, e) => {
                 OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -148,9 +140,11 @@ namespace EbookReader.Presenters
                     }
                 }
             };
+            int totalWidth = 0;
 
             foreach (Ebook ebook in mainViewRepository.GetEbookItems())
             {
+                totalWidth += itemUserControlTemp.Width + mainView.TableLayoutPanel.Margin.Horizontal / 2 + mainView.TableLayoutPanel.Padding.Horizontal / 2;
                 IEbookItemView ebookItemView = new EbookItemView();
                 new EbookItemPresenter(ebookItemView, ebook);
                 UserControl itemUserControl = ebookItemView.EbookItemUserControl;
@@ -159,11 +153,20 @@ namespace EbookReader.Presenters
                     if (ebook.EbookTitle.ToLower().Contains(nameFilter.ToLower()))
                     {
                         mainView.TableLayoutPanel.Controls.Add(itemUserControl);
+                        if (totalWidth > maxWidth)
+                        {
+                            mainView.TableLayoutPanel.RowCount++;
+                        }
                     }
+
                 }
                 else
                 {
                     mainView.TableLayoutPanel.Controls.Add(itemUserControl);
+                    if (totalWidth > maxWidth)
+                    {
+                        mainView.TableLayoutPanel.RowCount++;
+                    }
                 }
             }
 

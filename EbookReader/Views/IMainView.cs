@@ -1,4 +1,5 @@
 ﻿using EbookReader.Models;
+using Guna.UI2.WinForms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace EbookReader.Views
         List<Ebook> EbookItems { get; set; }
         TableLayoutPanel TableLayoutPanel { get; }
 
-        TextBox SearchTextBox { get; }
+        Guna2TextBox SearchTextBox { get; }
 
         Form MainViewForm { get; }
 
