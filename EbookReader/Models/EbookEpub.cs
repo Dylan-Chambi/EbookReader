@@ -9,6 +9,7 @@ using System.Xml;
 using VersOne.Epub;
 using HtmlAgilityPack;
 using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace EbookReader.Models
 {
@@ -18,12 +19,19 @@ namespace EbookReader.Models
 
         public EbookEpub(String ebookpath) : base(ebookpath, "", "", null, EbookType.EPUB)
         {
-            this.eBook = EpubReader.ReadBook(ebookpath);
-            this.EbookTitle = eBook.Title;
-            this.EbookAuthor = eBook.Author;
-            if (eBook.CoverImage != null)
+            try
             {
-                this.EbookCoverImage = Image.FromStream(new MemoryStream(eBook.CoverImage));
+                this.eBook = EpubReader.ReadBook(ebookpath);
+                this.EbookTitle = eBook.Title;
+                this.EbookAuthor = eBook.Author;
+                if (eBook.CoverImage != null)
+                {
+                    this.EbookCoverImage = Image.FromStream(new MemoryStream(eBook.CoverImage));
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error while reading the ebook: " + e.Message);
             }
         }
 

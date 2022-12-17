@@ -45,8 +45,8 @@ namespace EbookReader.Presenters
         private Control control2;
         private Control controlForLoad;
 
-        private string backgroundColor = "#ffffff";
-        private string textColor = "#000000";
+        private string backgroundColor = "#000000";
+        private string textColor = "#ffffff";
 
         private string selectedButtonColor = "#000000";
         private string selectedButtonTextColor = "#ffffff";
@@ -315,7 +315,32 @@ namespace EbookReader.Presenters
             }
             else
             {
-                pageItemView2.WebBrowser.DocumentText = "";
+                HtmlDocument newDocument = new HtmlDocument();
+                newDocument.OptionOutputAsXml = true;
+                HtmlNode html = newDocument.CreateElement("html");
+                newDocument.DocumentNode.AppendChild(html);
+
+                HtmlNode headNode = HtmlNode.CreateNode("<head></head>");
+                html.AppendChild(headNode);
+
+                HtmlNode metaEdge = HtmlNode.CreateNode("<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">");
+                headNode.AppendChild(metaEdge);
+
+                HtmlNode metaCharset = HtmlNode.CreateNode("<meta charset=\"utf-8\">");
+                headNode.AppendChild(metaCharset);
+
+                HtmlNode metaViewport = HtmlNode.CreateNode("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
+                headNode.AppendChild(metaViewport);
+
+                HtmlNode definitiveStyle = HtmlNode.CreateNode("<style> body { margin-top: 50px; margin-bottom: 0; margin-left: 50px; margin-right: 50px; display: flex-box; } </style>");
+                headNode.AppendChild(definitiveStyle);
+
+                HtmlNode backgroundColorStyle = HtmlNode.CreateNode("<style> body { background-color: " + backgroundColor + "!important; color: " + textColor + "!important; } </style>");
+                headNode.AppendChild(backgroundColorStyle);
+
+                HtmlNode bodyNode = HtmlNode.CreateNode("<body></body>");
+                html.AppendChild(bodyNode);
+                pageItemView2.WebBrowser.DocumentText = newDocument.DocumentNode.OuterHtml;
             }
         }
 
@@ -356,7 +381,6 @@ namespace EbookReader.Presenters
         }
 
 
-
         private void LoadChapterPages(int chapter)
         {
             pageItemViewForLoad.WebBrowser.DocumentText = "";
@@ -382,16 +406,12 @@ namespace EbookReader.Presenters
             HtmlNode metaCharset = HtmlNode.CreateNode("<meta charset=\"utf-8\">");
             headNode.AppendChild(metaCharset);
 
-            //set viewport width and height
             HtmlNode metaViewport = HtmlNode.CreateNode("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
             headNode.AppendChild(metaViewport);
 
-            // align content to center
-            // margin positions: top, right, bottom, left
             HtmlNode definitiveStyle = HtmlNode.CreateNode("<style> body { margin-top: 50px; margin-bottom: 0; margin-left: 50px; margin-right: 50px; display: flex-box; } </style>");
             headNode.AppendChild(definitiveStyle);
 
-            //set theme
             HtmlNode backgroundColorStyle = HtmlNode.CreateNode("<style> body { background-color: " + backgroundColor + "!important; color: " + textColor + "!important; } </style>");
             headNode.AppendChild(backgroundColorStyle);
 

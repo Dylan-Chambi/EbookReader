@@ -121,17 +121,29 @@ namespace EbookReader.Presenters
                         // check if file is already in database
                         if (mainViewRepository.GetEbookItems().Where(x => x.EbookPath == fileName).Count() == 0)
                         {
-                            // add to database
+                            try {
+                                // add to database
                             mainViewRepository.AddEbookItem(new EbookEpub(fileName));
                             // add to table
                             IEbookItemView ebookItemView = new EbookItemView();
                             new EbookItemPresenter(ebookItemView, mainViewRepository.GetEbookItems().Where(x => x.EbookPath == fileName).First());
                             UserControl itemUserControl = ebookItemView.EbookItemUserControl;
                             mainView.TableLayoutPanel.Controls.Add(itemUserControl);
+                            }
+                            catch (Exception)
+                            {
+                                MessageBox.Show("This file is not a valid ebook file or has an unsupported format",
+                                "Invalid Ebook file",
+                                 MessageBoxButtons.OK, 
+                                 MessageBoxIcon.Error);
+                            }
                         }
                         else
                         {
-                            MessageBox.Show("File already in database");
+                            MessageBox.Show("The file that you are trying to add is already in the database",
+                                "File already in database",
+                                 MessageBoxButtons.OK,
+                                 MessageBoxIcon.Error);
                         }
                     }
                 }
