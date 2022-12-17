@@ -30,6 +30,8 @@ namespace EbookReader.Models
                 SQLiteConnection.CreateFile(databasePath);
             }
 
+            //the command to add a nuget package as a dependency is: Install-Package System.Data.SQLite -Version
+
             sqliteConnection = new SQLiteConnection("Data Source=" + databasePath);
 
             sqliteConnection.Open();

@@ -45,12 +45,6 @@ namespace EbookReader.Presenters
         private Control control2;
         private Control controlForLoad;
 
-        private string backgroundColor = "#000000";
-        private string textColor = "#ffffff";
-
-        private string selectedButtonColor = "#000000";
-        private string selectedButtonTextColor = "#ffffff";
-
         private string normalButtonColor;
         private string normalButtonTextColor;
         private int currentBrowserHeight = 0;
@@ -63,7 +57,14 @@ namespace EbookReader.Presenters
 
         private FormWindowState oldWindowState;
 
+        private bool isFirstLoaded = true;
+
         private Timer myTimer = new Timer();
+
+        private string currentFontFamily = "Arial";
+
+        private ThemesProvider themeProvider = new ThemesProvider();
+
 
 
         public BookReadPresenter(IBookReadView bookReadView, Ebook ebook)
@@ -77,12 +78,27 @@ namespace EbookReader.Presenters
             styles = ebook.getStylesheets();
             chaptersContent = ebook.getChaptersContent();
             InitPageItems();
+
+            bookReadView.ChangeTheme += (sender, e) =>
+            { 
+                if (!isFirstLoaded)
+                {
+                    Debug.WriteLine("Change theme");
+                    bookReadView.SideTableLayoutPanel.BackColor = themeProvider.GetTheme(bookReadView.CurrentTheme).backgroundUIColor;
+                    LoadChapterPages(currentChapter);
+                    SetBrowsersDocumentPages();
+                    LoadChaptersList();
+                    HandleChaptersChange(currentChapter);
+                }
+            };
             
 
-            bookReadView.ListIndexTable.SizeChanged += (sender, e) =>
-            {
-                bookReadView.ListIndexTable.Height = bookReadView.EbookReadForm.Height - bookReadView.ListIndexTable.Location.Y - 20;
-            };
+            // bookReadView.ListIndexTable.SizeChanged += (sender, e) =>
+            // {
+            //     // bookReadView.ListIndexTable.Height = bookReadView.EbookReadForm.Height - bookReadView.ListIndexTable.Location.Y - 20;
+            //     // ajust the size to only hide horizontal scroll bar
+            //     bookReadView.ListIndexTable.Height = bookReadView.ListIndexTable.Height - bookReadView.ListIndexTable.Location.Y - 20;
+            // };
 
             // execute after 1 second
             myTimer.Interval = 200;
@@ -106,6 +122,7 @@ namespace EbookReader.Presenters
 
                     bookReadView.EbookReadForm.StartPosition = FormStartPosition.CenterScreen;
                     myTimer.Stop();
+                    isFirstLoaded = false;
                 }
             );
             
@@ -251,13 +268,13 @@ namespace EbookReader.Presenters
         {
             if (prevButton != null)
             {
-                prevButton.BackColor = ColorTranslator.FromHtml(normalButtonColor);
-                prevButton.ForeColor = ColorTranslator.FromHtml(normalButtonTextColor);
+                prevButton.BackColor = themeProvider.GetTheme(bookReadView.CurrentTheme).backgroundUIColor;
+                prevButton.ForeColor = themeProvider.GetTheme(bookReadView.CurrentTheme).textColor;
             }
             if (buttons.ContainsKey(currentChapter))
             {
-                buttons[chapter].BackColor = ColorTranslator.FromHtml(selectedButtonColor);
-                buttons[chapter].ForeColor = ColorTranslator.FromHtml(selectedButtonTextColor);
+                buttons[chapter].BackColor = themeProvider.GetTheme(bookReadView.CurrentTheme).backgroundUISelectedColor;
+                buttons[chapter].ForeColor = themeProvider.GetTheme(bookReadView.CurrentTheme).textColor;
                 prevButton = buttons[chapter];
             }
         }
@@ -304,7 +321,7 @@ namespace EbookReader.Presenters
 
         private void SetBrowsersDocumentPages()
         {
-            if (currentPage % 2 == 1) //TODO: check if this is solution for the problem
+            if (currentPage % 2 == 1)
             {
                 currentPage--;
             }
@@ -335,7 +352,11 @@ namespace EbookReader.Presenters
                 HtmlNode definitiveStyle = HtmlNode.CreateNode("<style> body { margin-top: 50px; margin-bottom: 0; margin-left: 50px; margin-right: 50px; display: flex-box; } </style>");
                 headNode.AppendChild(definitiveStyle);
 
-                HtmlNode backgroundColorStyle = HtmlNode.CreateNode("<style> body { background-color: " + backgroundColor + "!important; color: " + textColor + "!important; } </style>");
+                // covner Color to hex
+                string hexColorBackground = "#" + themeProvider.GetTheme(bookReadView.CurrentTheme).backgroundTextColor.R.ToString("X2") + themeProvider.GetTheme(bookReadView.CurrentTheme).backgroundTextColor.G.ToString("X2") + themeProvider.GetTheme(bookReadView.CurrentTheme).backgroundTextColor.B.ToString("X2");
+                string hexColorText = "#" + themeProvider.GetTheme(bookReadView.CurrentTheme).textColor.R.ToString("X2") + themeProvider.GetTheme(bookReadView.CurrentTheme).textColor.G.ToString("X2") + themeProvider.GetTheme(bookReadView.CurrentTheme).textColor.B.ToString("X2");
+
+                HtmlNode backgroundColorStyle = HtmlNode.CreateNode("<style> body { background-color: " + hexColorBackground + "; color: " + hexColorText + "; } </style>");
                 headNode.AppendChild(backgroundColorStyle);
 
                 HtmlNode bodyNode = HtmlNode.CreateNode("<body></body>");
@@ -348,6 +369,7 @@ namespace EbookReader.Presenters
         private void LoadChaptersList()
         {
             chapters = ebook.getChapters();
+            bookReadView.ListIndexTable.Controls.Clear();
             buttons = new Dictionary<int, Control>();
             prevButton = null;
 
@@ -357,8 +379,27 @@ namespace EbookReader.Presenters
                 new IndexItemPresenter(indexItemView, chapter.ChapterTitle, chapter.ChapterIndexPage);
                 Control control = (UserControl)indexItemView;
                 bookReadView.ListIndexTable.Controls.Add(control);
-                control.Dock = DockStyle.Top;
-                normalButtonColor = indexItemView.IndexItemButton.BackColor.Name;
+
+                // set size to avoid horizontal scroll
+                control.Anchor = (AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right);
+
+                // apply theme
+                indexItemView.IndexItemButton.BackColor = themeProvider.GetTheme(bookReadView.CurrentTheme).backgroundUIColor;
+                indexItemView.IndexItemButton.ForeColor = themeProvider.GetTheme(bookReadView.CurrentTheme).textColor;
+
+                // change on mouse enter and leave
+                indexItemView.IndexItemButton.MouseEnter += (sender, e) =>
+                {
+                    indexItemView.IndexItemButton.BackColor = themeProvider.GetTheme(bookReadView.CurrentTheme).backgroundUIHoverColor;
+                };
+
+                indexItemView.IndexItemButton.MouseLeave += (sender, e) =>
+                {
+                    if (indexItemView.IndexItemPageNumber != currentChapter)
+                    {
+                        indexItemView.IndexItemButton.BackColor = themeProvider.GetTheme(bookReadView.CurrentTheme).backgroundUIColor;
+                    }
+                };
 
                 indexItemView.IndexItemButton.Click += (sender, e) =>
                 {
@@ -366,7 +407,7 @@ namespace EbookReader.Presenters
                     currentChapter = indexItemView.IndexItemPageNumber;
                     LoadChapterPages(currentChapter);
                     SetBrowsersDocumentPages();
-                    indexItemView.IndexItemButton.BackColor = ColorTranslator.FromHtml(selectedButtonColor);
+                    indexItemView.IndexItemButton.BackColor = themeProvider.GetTheme(bookReadView.CurrentTheme).backgroundUISelectedColor;
                     HandleChaptersChange(indexItemView.IndexItemPageNumber);
                 };
                 indexItemView.IndexItemButton.PreviewKeyDown += new PreviewKeyDownEventHandler((sender, e) =>
@@ -412,7 +453,10 @@ namespace EbookReader.Presenters
             HtmlNode definitiveStyle = HtmlNode.CreateNode("<style> body { margin-top: 50px; margin-bottom: 0; margin-left: 50px; margin-right: 50px; display: flex-box; } </style>");
             headNode.AppendChild(definitiveStyle);
 
-            HtmlNode backgroundColorStyle = HtmlNode.CreateNode("<style> body { background-color: " + backgroundColor + "!important; color: " + textColor + "!important; } </style>");
+            string hexColorBackground = "#" + themeProvider.GetTheme(bookReadView.CurrentTheme).backgroundTextColor.R.ToString("X2") + themeProvider.GetTheme(bookReadView.CurrentTheme).backgroundTextColor.G.ToString("X2") + themeProvider.GetTheme(bookReadView.CurrentTheme).backgroundTextColor.B.ToString("X2");
+            string hexColorText = "#" + themeProvider.GetTheme(bookReadView.CurrentTheme).textColor.R.ToString("X2") + themeProvider.GetTheme(bookReadView.CurrentTheme).textColor.G.ToString("X2") + themeProvider.GetTheme(bookReadView.CurrentTheme).textColor.B.ToString("X2");
+
+            HtmlNode backgroundColorStyle = HtmlNode.CreateNode("<style> body { background-color: " + hexColorBackground + "; color: " + hexColorText + "; } </style>");
             headNode.AppendChild(backgroundColorStyle);
 
             HtmlNode bodyNode = HtmlNode.CreateNode("<body></body>");

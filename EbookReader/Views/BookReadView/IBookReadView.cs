@@ -13,7 +13,17 @@ namespace EbookReader.Views
         Ebook CurrentEbook { get; set; }
         TableLayoutPanel ListIndexTable { get; }
         TableLayoutPanel TableLayoutPanel { get; }
+
+        TableLayoutPanel SideTableLayoutPanel { get; }
         Form EbookReadForm { get; }
+
+
+
+        string CurrentTheme { get; set; }
+
+
+        event EventHandler ChangeTheme;
+
 
 
         //event EventHandler BookReadViewLoad;

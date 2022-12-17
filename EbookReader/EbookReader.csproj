@@ -97,6 +97,7 @@
     <Compile Include="Models\EbookEpub.cs" />
     <Compile Include="Models\IMainViewRepository.cs" />
     <Compile Include="Models\MainViewRepository.cs" />
+    <Compile Include="Models\ThemesProvider.cs" />
     <Compile Include="Presenters\BookReadPresenter.cs" />
     <Compile Include="Presenters\EbookItemPresenter.cs" />
     <Compile Include="Presenters\EbookItemViewAddPresenter.cs" />
@@ -111,6 +112,9 @@
     </Compile>
     <Compile Include="Views\BookReadView\BookReadView.Designer.cs">
       <DependentUpon>BookReadView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BookReadView\CustomRadioButton\CustomRadioButton.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Views\EbookItemViewAdd.cs">
       <SubType>UserControl</SubType>
@@ -210,10 +214,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="x64\SQLite.Interop.dll" />
-    <Content Include="x86\SQLite.Interop.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
