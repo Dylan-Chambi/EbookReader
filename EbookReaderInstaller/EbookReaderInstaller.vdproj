@@ -45,6 +45,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_3AA9708F22744561A187CEFA7E15710F"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_3E9EC037E3A9274553BD82BF0A639A45"
         "OwnerKey" = "8:_8DB53C4EB2304A4FB605E048A9C253C5"
         "MsmSig" = "8:_UNDEFINED"
@@ -105,6 +111,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_A85274668E67CD29E6931FFC941A4C5B"
+        "OwnerKey" = "8:_8DB53C4EB2304A4FB605E048A9C253C5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_B581548BCFF622BA1FD9AD64790679C3"
         "OwnerKey" = "8:_8DB53C4EB2304A4FB605E048A9C253C5"
         "MsmSig" = "8:_UNDEFINED"
@@ -137,6 +149,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_2C3BA958BF9D3C0ACF6E7E8E5AE4C043"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_A85274668E67CD29E6931FFC941A4C5B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -399,6 +417,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3AA9708F22744561A187CEFA7E15710F"
+            {
+            "SourcePath" = "8:..\\..\\..\\..\\Downloads\\logo.ico"
+            "TargetName" = "8:logo.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_B18A9AC744C847329917E26F1BE17A5C"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_3E9EC037E3A9274553BD82BF0A639A45"
             {
             "AssemblyRegister" = "3:1"
@@ -594,6 +632,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A85274668E67CD29E6931FFC941A4C5B"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Guna.UI2, Version=2.0.3.5, Culture=neutral, PublicKeyToken=4015e4865bda28a4, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_A85274668E67CD29E6931FFC941A4C5B"
+                    {
+                    "Name" = "8:Guna.UI2.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Guna.UI2.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_D8120BD61DC24DABA921A32585BD9C99"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B581548BCFF622BA1FD9AD64790679C3"
             {
             "AssemblyRegister" = "3:1"
@@ -748,7 +817,7 @@
             }
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_D8120BD61DC24DABA921A32585BD9C99"
             {
-            "DefaultLocation" = "8:[ProgramFilesFolder][Manufacturer]\\[ProductName]"
+            "DefaultLocation" = "8:[ProgramFiles64Folder][Manufacturer]\\[ProductName]"
             "Name" = "8:#1925"
             "AlwaysCreate" = "11:FALSE"
             "Condition" = "8:"
@@ -797,7 +866,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:EbookReader"
         "ProductCode" = "8:{AFA43C58-6487-4003-BDC5-A8B2A456D1B5}"
-        "PackageCode" = "8:{F81225A8-0C6C-49D6-92D4-01069A561A5A}"
+        "PackageCode" = "8:{177FBF65-8BC5-4B01-9B46-5BC2390080DB}"
         "UpgradeCode" = "8:{20924BB0-6912-4E01-8F21-C43E265CABA1}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -818,7 +887,7 @@
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
-        "TargetPlatform" = "3:0"
+        "TargetPlatform" = "3:1"
         "PreBuildEvent" = "8:"
         "PostBuildEvent" = "8:"
         "RunPostBuildEvent" = "3:0"
@@ -928,7 +997,7 @@
             "Target" = "8:_8DB53C4EB2304A4FB605E048A9C253C5"
             "Folder" = "8:_B18A9AC744C847329917E26F1BE17A5C"
             "WorkingFolder" = "8:_D8120BD61DC24DABA921A32585BD9C99"
-            "Icon" = "8:"
+            "Icon" = "8:_3AA9708F22744561A187CEFA7E15710F"
             "Feature" = "8:"
             }
         }
