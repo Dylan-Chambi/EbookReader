@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Guna.UI2.WinForms;
 
 namespace EbookReader.Views
 {
     public interface IEbookItemViewAdd
     {
-        Button ButtonAdd { get; }
+        Guna2Button ButtonAdd { get; }
     }
 }

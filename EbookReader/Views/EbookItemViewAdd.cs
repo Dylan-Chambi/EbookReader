@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Guna.UI2.WinForms;
 
 namespace EbookReader.Views
 {
@@ -15,9 +16,12 @@ namespace EbookReader.Views
         public EbookItemViewAdd()
         {
             InitializeComponent();
+            // set pointer hand for button
+            this.guna2Button1.Cursor = Cursors.Hand;
         }
 
-        public Button ButtonAdd { get => this.button1;}
+        public Guna2Button ButtonAdd { get => this.guna2Button1;}
         public UserControl EbookItemAddUserControl { get => this; }
+
     }
 }
