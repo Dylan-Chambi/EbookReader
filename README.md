@@ -48,7 +48,7 @@ Ctrl + F5
 
 | Platform | Download |
 | --- | --- |
-| Windows | [Download]()
+| Windows | [Download](https://github.com/Dylan-Chambi/EbookReader/raw/main/download/EbookReaderInstaller.msi)
 
 * Install the application (EbookReaderInstaller.msi)
 
