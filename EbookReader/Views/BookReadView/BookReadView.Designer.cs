@@ -28,14 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BookReadView));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.customRadioButton4 = new EbookReader.Views.CustomRadioButton();
             this.customRadioButton3 = new EbookReader.Views.CustomRadioButton();
             this.customRadioButton2 = new EbookReader.Views.CustomRadioButton();
             this.customRadioButton1 = new EbookReader.Views.CustomRadioButton();
-            this.customRadioButton4 = new EbookReader.Views.CustomRadioButton();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -54,7 +55,7 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1184, 611);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1384, 761);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // tableLayoutPanel3
@@ -71,7 +72,7 @@
             this.tableLayoutPanel3.RowCount = 2;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 68F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(272, 611);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(272, 761);
             this.tableLayoutPanel3.TabIndex = 1;
             // 
             // tableLayoutPanel2
@@ -87,7 +88,7 @@
             this.tableLayoutPanel2.Padding = new System.Windows.Forms.Padding(0, 0, 1, 0);
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(272, 543);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(272, 693);
             this.tableLayoutPanel2.TabIndex = 1;
             // 
             // panel1
@@ -97,10 +98,29 @@
             this.panel1.Controls.Add(this.customRadioButton2);
             this.panel1.Controls.Add(this.customRadioButton1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(3, 546);
+            this.panel1.Location = new System.Drawing.Point(3, 696);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(266, 62);
             this.panel1.TabIndex = 2;
+            // 
+            // customRadioButton4
+            // 
+            this.customRadioButton4.AutoSize = true;
+            this.customRadioButton4.CheckedColor = System.Drawing.Color.CornflowerBlue;
+            this.customRadioButton4.FlatAppearance.BorderSize = 0;
+            this.customRadioButton4.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this.customRadioButton4.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this.customRadioButton4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this.customRadioButton4.Location = new System.Drawing.Point(209, 18);
+            this.customRadioButton4.MinimumSize = new System.Drawing.Size(0, 21);
+            this.customRadioButton4.Name = "customRadioButton4";
+            this.customRadioButton4.Padding = new System.Windows.Forms.Padding(10, 6, 1, 7);
+            this.customRadioButton4.Size = new System.Drawing.Size(25, 26);
+            this.customRadioButton4.TabIndex = 3;
+            this.customRadioButton4.TabStop = true;
+            this.customRadioButton4.UncheckedColor = System.Drawing.Color.CornflowerBlue;
+            this.customRadioButton4.UseVisualStyleBackColor = true;
+            this.customRadioButton4.CheckedChanged += new System.EventHandler(this.customRadioButton4_CheckedChanged);
             // 
             // customRadioButton3
             // 
@@ -156,32 +176,14 @@
             this.customRadioButton1.UseVisualStyleBackColor = true;
             this.customRadioButton1.CheckedChanged += new System.EventHandler(this.customRadioButton1_CheckedChanged);
             // 
-            // customRadioButton4
-            // 
-            this.customRadioButton4.AutoSize = true;
-            this.customRadioButton4.CheckedColor = System.Drawing.Color.CornflowerBlue;
-            this.customRadioButton4.FlatAppearance.BorderSize = 0;
-            this.customRadioButton4.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            this.customRadioButton4.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            this.customRadioButton4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
-            this.customRadioButton4.Location = new System.Drawing.Point(209, 18);
-            this.customRadioButton4.MinimumSize = new System.Drawing.Size(0, 21);
-            this.customRadioButton4.Name = "customRadioButton4";
-            this.customRadioButton4.Padding = new System.Windows.Forms.Padding(10, 6, 1, 7);
-            this.customRadioButton4.Size = new System.Drawing.Size(25, 26);
-            this.customRadioButton4.TabIndex = 3;
-            this.customRadioButton4.TabStop = true;
-            this.customRadioButton4.UncheckedColor = System.Drawing.Color.CornflowerBlue;
-            this.customRadioButton4.UseVisualStyleBackColor = true;
-            this.customRadioButton4.CheckedChanged += new System.EventHandler(this.customRadioButton4_CheckedChanged);
-            // 
             // BookReadView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1184, 611);
+            this.ClientSize = new System.Drawing.Size(1384, 761);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.MinimumSize = new System.Drawing.Size(1200, 650);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(1400, 800);
             this.Name = "BookReadView";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "BookReadView";

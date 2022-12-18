@@ -72,6 +72,7 @@ namespace EbookReader.Presenters
             this.bookReadView = bookReadView;
             this.ebook = ebook;
 
+            this.bookReadView.EbookReadForm.Text = ebook.EbookTitle ?? "Ebook Reader";
             bookReadView.CurrentEbook = ebook;
             images = ebook.getImages();
             fonts = ebook.getFonts();
