@@ -140,6 +140,8 @@ namespace EbookReader.Presenters
             bookReadView.TableLayoutPanel.Controls.Add(control);
             control.Dock = DockStyle.Fill;
             pageItemView.WebBrowser.ScrollBarsEnabled = false;
+            pageItemView.WebBrowser.IsWebBrowserContextMenuEnabled = false;
+            pageItemView.WebBrowser.WebBrowserShortcutsEnabled = false;
 
             pageItemView2 = new PageItemView();
             new PageItemPresenter(pageItemView2, "");
@@ -147,6 +149,8 @@ namespace EbookReader.Presenters
             bookReadView.TableLayoutPanel.Controls.Add(control2);
             control2.Dock = DockStyle.Fill;
             pageItemView2.WebBrowser.ScrollBarsEnabled = false;
+            pageItemView2.WebBrowser.IsWebBrowserContextMenuEnabled = false;
+            pageItemView2.WebBrowser.WebBrowserShortcutsEnabled = false;
 
             pageItemViewForLoad = new PageItemView();
             new PageItemPresenter(pageItemViewForLoad, "");
@@ -155,6 +159,8 @@ namespace EbookReader.Presenters
             controlForLoad.Dock = DockStyle.Fill;
             pageItemViewForLoad.WebBrowser.ScrollBarsEnabled = false;
             controlForLoad.Visible = false;
+            pageItemViewForLoad.WebBrowser.IsWebBrowserContextMenuEnabled = false;
+            pageItemViewForLoad.WebBrowser.WebBrowserShortcutsEnabled = false;
 
 
             controlForLoad.BeginInvoke((MethodInvoker)delegate ()

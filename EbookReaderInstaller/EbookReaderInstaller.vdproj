@@ -148,18 +148,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_2C3BA958BF9D3C0ACF6E7E8E5AE4C043"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_A85274668E67CD29E6931FFC941A4C5B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_8DB53C4EB2304A4FB605E048A9C253C5"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -202,6 +190,12 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_A85274668E67CD29E6931FFC941A4C5B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_810C1A0C6B9D9071588FAA29BD2C1F4C"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -227,6 +221,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_868CCDF1BA6DB1D3BCF5BEE29B01E82F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_2C3BA958BF9D3C0ACF6E7E8E5AE4C043"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -422,7 +422,7 @@
             "SourcePath" = "8:..\\..\\..\\..\\Downloads\\logo.ico"
             "TargetName" = "8:logo.ico"
             "Tag" = "8:"
-            "Folder" = "8:_B18A9AC744C847329917E26F1BE17A5C"
+            "Folder" = "8:_D8120BD61DC24DABA921A32585BD9C99"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
